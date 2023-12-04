@@ -26,17 +26,19 @@
       <li class="list-group-item">Item 2</li>
       <li class="list-group-item">Item 3</li>
       <li class="list-group-item">Item 4</li>
-      <li>Item 5</li>
     </ul>
    </div>
   </div>
-  <script>
-    const list =document.getElementsByTagName('li') 
-    for (i=0;i<list.length;i++){
-      list[i].style.border = "2px dotted red";
+
+  <SCRIPT>
+    const list =document.querySelectorAll("li:nth-child(odd)");
+    const lists = document.querySelectorAll('li');
+    lists[1].style.color ="green";
+    for( i=0;i<list.length;i++){
+      
+      list[i].style.backgroundColor="green";
     }
-     
-  </script>
+  </SCRIPT>
 
 </body>
 </html>
