@@ -92,6 +92,7 @@
                     if(confirm('Are You Sure?')){
                         var li = e.target.parentElement;
                         listitems.removeChild(li);
+                        localStorage.removeItem(uemail);
                     }
 
                 }
