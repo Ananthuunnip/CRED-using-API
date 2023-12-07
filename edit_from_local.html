@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>localStorage</title>
+    <style>
+        #main-container{
+            border: 2px solid black;
+            width: 40vh;
+            height: 35vh;
+            padding: 50px 50px;
+            background-color: chartreuse;
+            border-radius: 1rem;
+        }
+        input{
+            height: 3vh;
+            border-radius: 5px;
+        }
+        #btn{
+            margin-top: 5vh;
+            margin-left: 7vh;
+        }
+        #output{
+            border: 2px solid black;
+            width: 100vh;
+            height: 35vh;
+            padding: 50px 50px;
+            background-color: chartreuse;
+            border-radius: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="main-container">
+        <form action="">
+            <label for="ufname">first name</label><br>
+            <input type="text" id="ufname"><br>
+            <label for="ulname">last name</label><br>
+            <input type="text" id="ulname"><br>
+            <label for="ugmail">Gmail</label><br>
+            <input type="text" id="ugmail"><br>
+            <button id="btn">ADD</button>
+        </form>
+
+    </div>
+    <div id="output">
+        <ul id="list">
+            
+        </ul>
+
+    </div>
+    <script>
+        var fname = document.querySelector('#ufname');
+        var lname = document.querySelector('#ulname');
+        var gmail = document.querySelector('#ugmail');
+        var btn = document.querySelector('#btn');
+        const listitems = document.querySelector('#output');
+        btn.addEventListener('click',local);
+        function local(e){
+            e.preventDefault();
+            const userFirstName = fname.value;
+            const userLastName = lname.value;
+            const userEmail = gmail.value;
+            // Create an object to store user details
+            const userDetails = {
+                firstName: userFirstName,
+                lastName: userLastName,
+                email: userEmail
+            };
+            const myobj =JSON.stringify(userDetails);
+            localStorage.setItem(userDetails.email,myobj);
+            let objdata = JSON.parse(localStorage.getItem(userDetails.email));
+            var ufirst =objdata.firstName;
+            var ulast =objdata.lastName;
+            var uemail =objdata.email;
+            var del = document.createElement('button');
+            var edit =document.createElement('button');
+            let li = document.createElement('li');
+            del.className = 'delete';
+            edit.className = "edit";
+            del.innerText ="Delete";
+            edit.innerText ="Edit";
+            li.className ="datas";
+            li.appendChild(document.createTextNode("FIRST NAME :"+ufirst+ "     " + "LAST NAME :"+ulast+"     "+"GMAIL :"+uemail));
+            
+            
+            listitems.append(li);
+            li.appendChild(del);
+            li.appendChild(edit);
+            alert('User details have been stored in local storage.');
+            
+            del.addEventListener('click',removeelement);
+            edit.addEventListener('click',edittext);
+            function removeelement(e){
+                if(e.target.classList.contains('delete')){
+                    if(confirm('Are You Sure?')){
+                        var li = e.target.parentElement;
+                        listitems.removeChild(li);
+                        localStorage.removeItem(uemail);
+                    }
+
+                }
+            }
+            function edittext(e){
+                var copydata = JSON.parse(localStorage.getItem(uemail));
+                var li = e.target.parentElement;
+                listitems.removeChild(li);
+                localStorage.removeItem(uemail);
+
+                ufname.value= copydata.firstName;
+                ulname.value= copydata.lastName;
+                ugmail.value= copydata.email;
+            }
+            
+        }
+        </script>
+</body>
+</html>
