@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>localStorage</title>
+    <style>
+        #main-container{
+            border: 2px solid black;
+            width: 25vh;
+            height: 25vh;
+            padding: 50px 50px;
+            background-color: chartreuse;
+            border-radius: 1rem;
+        }
+        input{
+            height: 3vh;
+            border-radius: 5px;
+        }
+        #btn{
+            margin-top: 5vh;
+            margin-left: 5vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="main-container">
+        <form action="">
+            <label for="ufname">first name</label><br>
+            <input type="text" id="ufname"><br>
+            <label for="ulname">last name</label><br>
+            <input type="text" id="ulname"><br>
+            <label for="ugmail">Gmail</label><br>
+            <input type="text" id="ugmail"><br>
+            <button id="btn">LOGIN</button>
+        </form>
+
+    </div>
+    <script>
+        let i =1;
+        const fname = document.querySelector('#ufname');
+        const lname = document.querySelector('#ulname');
+        const gmail = document.querySelector('#ugmail');
+        const btn = document.querySelector('#btn');
+        btn.addEventListener('click',local)
+        function local(e){
+            e.preventDefault();
+            const userFirstName = fname.value;
+            const userLastName = lname.value;
+            const userEmail = gmail.value;
+
+            // Create an object to store user details
+            const userDetails = {
+                firstName: userFirstName,
+                lastName: userLastName,
+                email: userEmail
+            };
+            const myobj =JSON.stringify(userDetails)
+            if (i>=1){
+                localStorage.setItem('userDATA '+i,myobj);
+                i+=1;
+            }
+            
+            alert('User details have been stored in local storage.');
+        }
+    </script>
+</body>
+</html>
