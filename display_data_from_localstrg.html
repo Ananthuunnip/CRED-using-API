@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>localStorage</title>
+    <style>
+        #main-container{
+            border: 2px solid black;
+            width: 40vh;
+            height: 35vh;
+            padding: 50px 50px;
+            background-color: chartreuse;
+            border-radius: 1rem;
+        }
+        input{
+            height: 3vh;
+            border-radius: 5px;
+        }
+        #btn{
+            margin-top: 5vh;
+            margin-left: 5vh;
+        }
+        #output{
+            border: 2px solid black;
+            width: 100vh;
+            height: 35vh;
+            padding: 50px 50px;
+            background-color: chartreuse;
+            border-radius: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="main-container">
+        <form action="">
+            <label for="ufname">first name</label><br>
+            <input type="text" id="ufname"><br>
+            <label for="ulname">last name</label><br>
+            <input type="text" id="ulname"><br>
+            <label for="ugmail">Gmail</label><br>
+            <input type="text" id="ugmail"><br>
+            <button id="btn">LOGIN</button>
+        </form>
+
+    </div>
+    <div id="output">
+        <ul id="list">
+            
+        </ul>
+
+    </div>
+    <script>
+        const fname = document.querySelector('#ufname');
+        const lname = document.querySelector('#ulname');
+        const gmail = document.querySelector('#ugmail');
+        const btn = document.querySelector('#btn');
+        const listitems = document.querySelector('#output');
+        btn.addEventListener('click',local);
+        function local(e){
+            e.preventDefault();
+            const userFirstName = fname.value;
+            const userLastName = lname.value;
+            const userEmail = gmail.value;
+            // Create an object to store user details
+            const userDetails = {
+                firstName: userFirstName,
+                lastName: userLastName,
+                email: userEmail
+            };
+            const myobj =JSON.stringify(userDetails);
+            localStorage.setItem(userDetails.email,myobj);
+            let objdata = JSON.parse(localStorage.getItem(userDetails.email));
+            let ufirst =objdata.firstName;
+            let ulast =objdata.lastName;
+            let uemail =objdata.email;
+            let li = document.createElement('li');
+            li.className ="datas";
+            li.appendChild(document.createTextNode("FIRST NAME :"+ufirst+ "     " + "LAST NAME :"+ulast+"     "+"GMAIL :"+uemail));
+            listitems.append(li);
+            alert('User details have been stored in local storage.');
+        }
+    </script>
+</body>
+</html>
