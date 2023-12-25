@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EXPENCE TRACKER</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    body{
+        padding: 10px;
+    }
+    h1{
+        text-align: center;
+    }
+    #dropbox{
+        width: 30vh;
+    }
+    form{
+        display: flex;
+        padding: 20px;
+
+    }
+    label{
+        padding: 8px;
+    }
+    #main-container,#output-container{
+        border-radius: 10px;
+        border: 2px solid black;
+    }
+    li{
+        list-style-type: none;
+    }
+</style>
+</head>
+<body>
+    <div class="container text-center" id="main-container">
+        <div class="row">
+          <div class="col">
+            <h1 class="p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">Let's Track EXPENCES</h1>
+
+          </div>
+        </div>
+        <div class="row">
+            <div class="col" id="nav">
+                <form method="post" id="addForm">
+                    <label for="exp-amound">Choose Expence Amound</label>
+                    <input type="number" id="exp-amound">
+                    <label for="discription">Choose Discription</label>
+                    <input type="text" id="discription" >
+                    <label for="dropbox">Choose CATOGARY</label>
+                    <select class="form-select" id="dropbox">
+                        <option selected>SELCET</option>
+                        <option >MOVIE</option>
+                        <option >TRAVEL</option>
+                        <option >PETROL</option>
+                        <option >FOOD</option>
+                        <option >TRIP</option>
+                    </select> 
+                    <button type="submit" class="btn btn-secondary btn-lg" id="submit">SUBMIT</button>
+                </form>
+            </div>
+          </div>
+        </div>
+        <div class="container text-center" id="output-container">
+            <div class="col">
+                <ul id="items" class="list-group">
+                    
+               </ul>
+            </div>
+          </div>
+    </div>
+    <script>
+        var form = document.getElementById('addForm');
+        var itemList = document.getElementById('items');
+
+        form.addEventListener('submit', addItem);
+        // itemList.addEventListener('click', removeItem);
+
+        function addItem(e){
+            e.preventDefault();
+
+            // Starting here
+            //calling data
+            var amo =document.querySelector('#exp-amound').value;
+            var dis =document.querySelector('#discription').value;
+            const catg =document.querySelector('#dropbox').value;
+            // window.addEventListener('load', loadAndDisplayStoredItems);
+            const user =1;
+            //creating obj of user
+            const userDetails ={
+                amound:amo,
+                disctiption:dis,
+                catogary:catg
+            }
+        //    
+            //storing the user data in localstorage
+            const myobj =JSON.stringify(userDetails);
+            localStorage.setItem(userDetails.disctiption,myobj);
+            
+            
+            
+            let objdata = JSON.parse(localStorage.getItem(userDetails.disctiption));
+            //calling data from localstorage
+            // var uamo =objdata.amound;
+            // var udis =objdata.disctiption;
+            // var ucatg =objdata.catogary;
+
+
+
+            // Creating button
+            var li = document.createElement('li');
+            var deleteBtn = document.createElement('button');
+            var editBtn =document.createElement('button');
+
+
+
+            // Add class to li
+            li.className = 'list-group-item';
+
+
+
+
+            // append data to  li
+            // Add text node with input value
+            li.appendChild(document.createTextNode("AMOUNT: " + objdata.amound + " ")); 
+            li.appendChild(document.createTextNode("DISCRIPTION : " + objdata.disctiption + " "));  
+            li.appendChild(document.createTextNode(" CATOGARY : " + objdata.catogary + " ")); 
+
+
+            //Button -Delete
+            // Create del button element
+            // Add classes to del button
+            deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
+            // Append text node
+            deleteBtn.appendChild(document.createTextNode(' Delete '));
+            // Append button to li
+            li.appendChild(deleteBtn);
+            deleteBtn.addEventListener('click', function() {
+                // Remove the item from the DOM
+                itemList.removeChild(li);
+                
+                // Remove the item from local storage
+                localStorage.removeItem(userDetails.disctiption);
+            });
+
+
+
+            //Button -Edit
+            // Add classes to edit button
+            editBtn.className = 'btn btn-danger btn-sm float-right delete';
+            // Append text node
+            editBtn.appendChild(document.createTextNode(' Edit '));
+            // Append button to li
+            li.appendChild(editBtn);
+            editBtn.addEventListener('click', function() {
+
+
+                var updatedAmo = objdata.amound;
+                var updatedDis = objdata.disctiption;
+                var updatedCatg = objdata.catogary;
+
+                // Remove the item from the DOM
+                itemList.removeChild(li);
+                
+                // Remove the item from local storage
+                localStorage.removeItem(userDetails.disctiption);
+
+                console.log(updatedCatg);
+                document.querySelector('#exp-amound').value = updatedAmo;
+                document.querySelector('#discription').value =  updatedDis;
+                document.querySelector('#dropbox').value = updatedCatg;
+            });
+
+            
+
+
+
+
+
+
+
+            // Append li to list
+            itemList.appendChild(li);
+        }
+        
+    </script>
+    
+</body>
+</html>
