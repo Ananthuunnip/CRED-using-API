@@ -69,120 +69,80 @@
           </div>
     </div>
     <script>
-        var form = document.getElementById('addForm');
-        var itemList = document.getElementById('items');
 
-        form.addEventListener('submit', addItem);
-        // itemList.addEventListener('click', removeItem);
+    var form = document.getElementById('addForm');
+    var itemList = document.getElementById('items');
 
-        function addItem(e){
-            e.preventDefault();
+    form.addEventListener('submit', addItem);
+    window.addEventListener('load', loadAndDisplayStoredItems);
 
-            // Starting here
-            //calling data
-            var amo =document.querySelector('#exp-amound').value;
-            var dis =document.querySelector('#discription').value;
-            const catg =document.querySelector('#dropbox').value;
-            // window.addEventListener('load', loadAndDisplayStoredItems);
-            const user =1;
-            //creating obj of user
-            const userDetails ={
-                amound:amo,
-                disctiption:dis,
-                catogary:catg
-            }
-        //    
-            //storing the user data in localstorage
-            const myobj =JSON.stringify(userDetails);
-            localStorage.setItem(userDetails.disctiption,myobj);
-            
-            
-            
-            let objdata = JSON.parse(localStorage.getItem(userDetails.disctiption));
-            //calling data from localstorage
-            // var uamo =objdata.amound;
-            // var udis =objdata.disctiption;
-            // var ucatg =objdata.catogary;
-
-
-
-            // Creating button
-            var li = document.createElement('li');
-            var deleteBtn = document.createElement('button');
-            var editBtn =document.createElement('button');
-
-
-
-            // Add class to li
-            li.className = 'list-group-item';
-
-
-
-
-            // append data to  li
-            // Add text node with input value
-            li.appendChild(document.createTextNode("AMOUNT: " + objdata.amound + " ")); 
-            li.appendChild(document.createTextNode("DISCRIPTION : " + objdata.disctiption + " "));  
-            li.appendChild(document.createTextNode(" CATOGARY : " + objdata.catogary + " ")); 
-
-
-            //Button -Delete
-            // Create del button element
-            // Add classes to del button
-            deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
-            // Append text node
-            deleteBtn.appendChild(document.createTextNode(' Delete '));
-            // Append button to li
-            li.appendChild(deleteBtn);
-            deleteBtn.addEventListener('click', function() {
-                // Remove the item from the DOM
-                itemList.removeChild(li);
-                
-                // Remove the item from local storage
-                localStorage.removeItem(userDetails.disctiption);
-            });
-
-
-
-            //Button -Edit
-            // Add classes to edit button
-            editBtn.className = 'btn btn-danger btn-sm float-right delete';
-            // Append text node
-            editBtn.appendChild(document.createTextNode(' Edit '));
-            // Append button to li
-            li.appendChild(editBtn);
-            editBtn.addEventListener('click', function() {
-
-
-                var updatedAmo = objdata.amound;
-                var updatedDis = objdata.disctiption;
-                var updatedCatg = objdata.catogary;
-
-                // Remove the item from the DOM
-                itemList.removeChild(li);
-                
-                // Remove the item from local storage
-                localStorage.removeItem(userDetails.disctiption);
-
-                console.log(updatedCatg);
-                document.querySelector('#exp-amound').value = updatedAmo;
-                document.querySelector('#discription').value =  updatedDis;
-                document.querySelector('#dropbox').value = updatedCatg;
-            });
-
-            
-
-
-
-
-
-
-
-            // Append li to list
-            itemList.appendChild(li);
+    function loadAndDisplayStoredItems() {
+        for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            var storedItem = JSON.parse(localStorage.getItem(key));
+            displayItem(storedItem);
         }
-        
-    </script>
+    }
+
+    function addItem(e) {
+        e.preventDefault();
+
+        var amo = document.querySelector('#exp-amound').value;
+        var dis = document.querySelector('#discription').value;
+        const catg = document.querySelector('#dropbox').value;
+
+        const userDetails = {
+            amound: amo,
+            disctiption: dis,
+            catogary: catg
+        }
+
+        const myobj = JSON.stringify(userDetails);
+        localStorage.setItem(userDetails.disctiption, myobj);
+
+        let objdata = JSON.parse(localStorage.getItem(userDetails.disctiption));
+
+        displayItem(objdata);
+
+        form.reset();
+    }
+
+    function displayItem(objdata) {
+        var li = document.createElement('li');
+        li.className = 'list-group-item';
+        li.appendChild(document.createTextNode("AMOUNT: " + objdata.amound + " "));
+        li.appendChild(document.createTextNode("DESCRIPTION: " + objdata.disctiption + " "));
+        li.appendChild(document.createTextNode("CATEGORY: " + objdata.catogary + " "));
+
+        var deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
+        deleteBtn.appendChild(document.createTextNode('Delete'));
+        deleteBtn.addEventListener('click', function () {
+            itemList.removeChild(li);
+            localStorage.removeItem(objdata.disctiption);
+        });
+        li.appendChild(deleteBtn);
+
+        var editBtn = document.createElement('button');
+        editBtn.className = 'btn btn-danger btn-sm float-right delete';
+        editBtn.appendChild(document.createTextNode('Edit'));
+        editBtn.addEventListener('click', function () {
+            var updatedAmo = objdata.amound;
+            var updatedDis = objdata.disctiption;
+            var updatedCatg = objdata.catogary;
+
+            document.querySelector('#exp-amound').value = updatedAmo;
+            document.querySelector('#discription').value = updatedDis;
+            document.querySelector('#dropbox').value = updatedCatg;
+
+            itemList.removeChild(li);
+            localStorage.removeItem(objdata.disctiption);
+        });
+        li.appendChild(editBtn);
+
+        itemList.appendChild(li);
+    }
+</script>
     
 </body>
 </html>
