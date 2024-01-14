@@ -47,7 +47,7 @@
                     <label for="discription">Choose Discription</label>
                     <input type="text" id="discription" >
                     <label for="dropbox">Choose CATOGARY</label>
-                    <select class="form-select" id="dropbox">
+                    <select class="container-fluid" id="dropbox">
                         <option selected>SELCET</option>
                         <option >MOVIE</option>
                         <option >TRAVEL</option>
@@ -79,10 +79,12 @@
         window.addEventListener('load', loadAndDisplayStoredItems);
     
         function loadAndDisplayStoredItems() {
-                axios.get("https://crudcrud.com/api/4d653686d4f14ded9a6e9caf5fee67a3/ListData")
+                axios.get("https://crudcrud.com/api/96149e5a29874846be45a1c8275d08ee/ListData")
             .then((response)=>{
-                var objDataList = response.data;
-                objDataList.forEach(item => displayItem(item));
+                
+                for(i=0;i<response.data.length;i++){
+                    displayItem(response.data[i])
+                }
             })
             .catch((error)=>{
                 console.log('Error fetching data:', error);
@@ -104,7 +106,7 @@
     
             
 
-            axios.post("https://crudcrud.com/api/4d653686d4f14ded9a6e9caf5fee67a3/ListData ",{userDetails})
+            axios.post("https://crudcrud.com/api/96149e5a29874846be45a1c8275d08ee/ListData ",{userDetails})
                 .then((response)=>{
                     displayItem(response.data)
                     console.log(response.data.userDetails.amound)
@@ -130,19 +132,27 @@
             li.appendChild(document.createTextNode("CATEGORY: " + objdata.userDetails.catogary + " "));
     
             var deleteBtn = document.createElement('button');
-
-            deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
+            deleteBtn.className = 'btn btn-danger btn-sm float-right delete mb-2 ml-2 mr-2';
             deleteBtn.appendChild(document.createTextNode('Delete'));
             deleteBtn.addEventListener('click', function () {
-                itemList.removeChild(li);
-                localStorage.removeItem(objdata.userDetails.disctiption);
+                console.log(objdata._id)
+                // localStorage.removeItem(objdata.userDetails.disctiption);
+                axios.delete("https://crudcrud.com/api/96149e5a29874846be45a1c8275d08ee/ListData/" + objdata._id)
+                    .then(()=>{
+                        itemList.removeChild(li);
+                        console.log('Item deleted successfully');
+                        console.log("deleted")
+                    })
+                    .catch((error)=>{
+                        console.error('Error deleting item:', error);
+                    })
             });
             li.appendChild(deleteBtn);
     
 
 
             var editBtn = document.createElement('button');
-            editBtn.className = 'btn btn-danger btn-sm float-right delete';
+            editBtn.className = 'btn btn-danger btn-sm float-right delete mb-2 ml-2 mr-2';
             editBtn.appendChild(document.createTextNode('Edit'));
 
             editBtn.addEventListener('click', function () {
