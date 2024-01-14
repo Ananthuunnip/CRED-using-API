@@ -79,7 +79,7 @@
         window.addEventListener('load', loadAndDisplayStoredItems);
     
         function loadAndDisplayStoredItems() {
-                axios.get("https://crudcrud.com/api/96149e5a29874846be45a1c8275d08ee/ListData")
+                axios.get("https://crudcrud.com/api/eb141d2d9a224abfa77a71943a19ccba/ListData")
             .then((response)=>{
                 
                 for(i=0;i<response.data.length;i++){
@@ -87,7 +87,7 @@
                 }
             })
             .catch((error)=>{
-                console.log('Error fetching data:', error);
+                console.log("Error fetching data : (not working the Get-Axios)");
             });
         }
     
@@ -106,16 +106,15 @@
     
             
 
-            axios.post("https://crudcrud.com/api/96149e5a29874846be45a1c8275d08ee/ListData ",{userDetails})
+            axios.post("https://crudcrud.com/api/eb141d2d9a224abfa77a71943a19ccba/ListData ",{userDetails})
                 .then((response)=>{
                     displayItem(response.data)
-                    console.log(response.data.userDetails.amound)
                 })
                 .catch((error)=>{
                     
                     document.body.innerHTML = document.body.innerHTML + "<h4>somthing went wrong </h4>"
                 })
-                // form.reset();
+                form.reset();
            
                 
             
@@ -137,11 +136,10 @@
             deleteBtn.addEventListener('click', function () {
                 console.log(objdata._id)
                 // localStorage.removeItem(objdata.userDetails.disctiption);
-                axios.delete("https://crudcrud.com/api/96149e5a29874846be45a1c8275d08ee/ListData/" + objdata._id)
+                axios.delete("https://crudcrud.com/api/eb141d2d9a224abfa77a71943a19ccba/ListData/" + objdata._id)
                     .then(()=>{
                         itemList.removeChild(li);
                         console.log('Item deleted successfully');
-                        console.log("deleted")
                     })
                     .catch((error)=>{
                         console.error('Error deleting item:', error);
@@ -165,7 +163,13 @@
                 document.querySelector('#dropbox').value = updatedCatg;
     
                 itemList.removeChild(li);
-                localStorage.removeItem(objdata.disctiption);
+                axios.delete("https://crudcrud.com/api/eb141d2d9a224abfa77a71943a19ccba/ListData/" + objdata._id)
+                    .then(()=>{
+                        console.log("hello")
+                    })
+                    .catch(()=>{
+                        console.log("error");
+                    })
             });
             li.appendChild(editBtn);
     
