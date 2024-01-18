@@ -169,15 +169,15 @@
             editBtn.style.padding ="10px";
             editBtn.style.marginLeft = "10px";
             editBtn.addEventListener("click",()=>{
-                var updatedname = objdata.userDetails.name;
-                var updatedphone = objdata.userDetails.phone;
-                var updatedaddress = objdata.userDetails.address;
+                var updatedname = objdata.userdata.name;
+                var updatedphone = objdata.userdata.phone;
+                var updatedaddress = objdata.userdata.address;
     
                 document.querySelector("#name").value = updatedname;
                 document.querySelector("#phone").value = updatedphone;
                 document.querySelector("#address").value = updatedaddress;
     
-                itemList.removeChild(li);
+                items.removeChild(li);
 
 
 
