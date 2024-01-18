@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Student Management</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        #main-container{
+            display: flex;
+            flex-direction: column;
+        }
+        #nav{
+            background-color: aquamarine;
+        }
+        #main-count{
+            color: aqua;
+            background-color: black;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        #count-part{
+            display: flex;
+        }
+        #formdiv{
+            border: 2px solid black;
+            padding: 5vh;
+            border-radius: .5rem;
+            width: 70vh;
+            
+            justify-content: center;
+            margin-left: 70vh;
+        }
+        #submitbutton{
+            padding: 1.5vh;
+
+            margin-top: 5%;
+            margin-left: 33%;
+        }
+        #output-items{
+            margin: 1vh 15vh;
+        
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main-container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light   " id="navbar">
+            <div class="container" id="main-count">
+             
+              <h1 class="mx-auto">Student Management</h1>
+              <div id="count-part">
+                <h6>All STUDENT </h6>
+                <pre>  :  </pre>
+                <h6 id="counting"> 1</h6>
+              </div>
+
+            </div>
+        </nav>
+        <div id="formdiv">
+            <form action="" id="formdatafetch">
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">FULL Name</label>
+                    <input type="text" id="name" class="form-control" id="exampleFormControlInput1" placeholder="AKASH KM....">
+                    <label for="exampleFormControlInput1" class="form-label">Phone Number</label>
+                    <input type="text" id="phone" class="form-control" id="exampleFormControlInput1" placeholder="9078563412...">
+                    <label for="exampleFormControlInput1" class="form-label">Address</label>
+                    <input type="text" id="address" class="form-control" id="exampleFormControlInput1" placeholder="Delhi...">
+                    <button type="submit" id="submitbutton" class="btn btn-outline-secondary">ADD STUDENT</button>
+                </div>
+
+            </form>
+           
+        </div>
+        <div id="output-items">
+            <ul class="list-group" id="itemlist">
+            </ul>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js"></script>
+    <script>
+        var form = document.querySelector("#formdatafetch");
+        var items = document.querySelector("#itemlist");
+
+        form.addEventListener("submit",additems);
+        window.addEventListener("load",loadanddisplay);
+
+        function loadanddisplay(){
+            axios.get("https://crudcrud.com/api/aafae33399eb4b75a6d78e47e86387a0/SchoolData")
+            .then((response)=>{
+                console.log("loading-display")
+                for(i=0;i<response.data.length;i++){
+                    displayItem(response.data[i])
+                }
+                console.log("hi")
+                const count = response.data.length;
+
+                const countofall = document.querySelector("#counting");
+                countofall.textContent =  count;
+                    
+                    
+
+            })
+            .catch((error)=>{
+                console.log("somthing error in loadanddisplay")
+            })
+        }
+        function additems(e){
+            e.preventDefault()
+            const uname = document.querySelector("#name").value;
+            const uphone = document.querySelector("#phone").value;
+            const uaddress = document.querySelector("#address").value;
+            const userdata ={
+                name : uname,
+                phone : uphone,
+                address :uaddress
+            }
+            axios.post("https://crudcrud.com/api/aafae33399eb4b75a6d78e47e86387a0/SchoolData",{userdata})
+            .then((response)=>{
+                displayItem(response.data)
+            })
+            .catch((error)=>{
+                console.log("getiing error in post")
+            })
+            form.reset();
+        }
+        function displayItem(objdata){
+            console.log(objdata.userdata.phone)
+            var li = document.createElement("li");
+            li.className = "list-group-item list-group-item-success";
+            li.appendChild(document.createTextNode("name : "+ "    "+ objdata.userdata.name + "   "))
+            li.appendChild(document.createTextNode("Phone : "+ "    "+ objdata.userdata.phone + "   "))
+            li.appendChild(document.createTextNode("Address : "+ "    "+ objdata.userdata.address + "   "))
+
+
+
+            var deletebtn = document.createElement('button');
+            deletebtn.className = "btn btn-outline-danger";
+            deletebtn.appendChild(document.createTextNode(" DELETE "))
+            deletebtn.style.padding ="10px";
+            deletebtn.style.marginLeft = "10px";
+            deletebtn.addEventListener("click",()=>{
+                axios.delete("https://crudcrud.com/api/aafae33399eb4b75a6d78e47e86387a0/SchoolData/" + objdata._id)
+                    .then(()=>{
+                        items.removeChild(li);
+                        console.log('Item deleted successfully');
+                    })
+                    .catch((error)=>{
+                        console.error('Error deleting item:');
+                    })
+
+
+            })
+            li.appendChild(deletebtn);
+
+
+
+
+
+            var editBtn = document.createElement('button');
+            editBtn.className = "btn btn-outline-danger";
+            editBtn.appendChild(document.createTextNode(" EDIT "))
+            editBtn.style.padding ="10px";
+            editBtn.style.marginLeft = "10px";
+            editBtn.addEventListener("click",()=>{
+                var updatedname = objdata.userDetails.name;
+                var updatedphone = objdata.userDetails.phone;
+                var updatedaddress = objdata.userDetails.address;
+    
+                document.querySelector("#name").value = updatedname;
+                document.querySelector("#phone").value = updatedphone;
+                document.querySelector("#address").value = updatedaddress;
+    
+                itemList.removeChild(li);
+
+
+
+                axios.delete("https://crudcrud.com/api/aafae33399eb4b75a6d78e47e86387a0/SchoolData" + objdata._id)
+                    .then(()=>{
+                        console.log("hello")
+                    })
+                    .catch(()=>{
+                        console.log("error");
+                    })
+
+
+            })
+            li.appendChild(editBtn);
+            items.appendChild(li);
+        }
+
+    </script>
+
+</body>
+
+</html>
